@@ -22,7 +22,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     flex: 1,
     backgroundColor: 'black',
-    opacity: 0.5 
+    opacity: 0.5,
+    margin: 0
   },
   contentModal: {
     width: '100%',
