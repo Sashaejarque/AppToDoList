@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 35,
-    fontFamily: 'Montserrat-Regular',
+    fontFamily: 'BebasNeue',
     color: '#F76C6A',
     paddingLeft: 5,
     fontWeight: '700'

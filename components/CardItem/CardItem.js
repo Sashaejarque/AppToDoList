@@ -1,6 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
-import { StyleSheet, Text, View, CheckBox, Pressable, Image } from 'react-native';
+import { StyleSheet, Text, View, Pressable, Image } from 'react-native';
 import {SwitchButton} from '../SwitchButton/SwitchButton';
 
 export const CardItem = ({ item, onpress}) => {
@@ -39,8 +38,8 @@ const styles = StyleSheet.create({
     marginRight: 10
   },
   text: {
-    paddingLeft: 8,
-    fontFamily: 'Montserrat-Regular',
+    paddingLeft: 16,
+    fontFamily: 'Montserrat',
     fontSize: 16,
   },
 });

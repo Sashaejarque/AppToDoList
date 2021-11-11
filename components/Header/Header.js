@@ -28,6 +28,6 @@ const styles = StyleSheet.create({
   textPrincipal: {
     color: '#F79E89',
     fontSize: 25,
-    fontFamily: 'Montserrat-Regular',
+    fontFamily: 'BebasNeue',
   },
 });

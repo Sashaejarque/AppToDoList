@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, Image, View, Pressable, Text } from 'react-native';
+import { StyleSheet, Image, View, Pressable } from 'react-native';
 
-export const ButtonPressable = ({ onpress }) => {
+export const ButtonPressable = ({ onpress}) => {
   return (
     <View>
       <Pressable onPress={onpress}>
