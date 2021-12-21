@@ -1,17 +1,25 @@
 import React from 'react';
-import { useState } from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, FlatList, Button } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Header } from '../components/Header/Header';
 import { Title } from '../components/Title/Title';
 import { Add } from '../components/Add/Add';
 import { CardItem } from '../components/CardItem/CardItem';
 import { ModalComponent } from '../components/ModalComponent/ModalComponent';
+import { useSelector, useDispatch } from 'react-redux';
+import { addItem } from '../store/actions/todo.action';
+import { deleteItem } from '../store/actions/todo.action';
+import { addTask } from '../db/index';
+import { fetchData } from '../db/index';
+import * as todoAction from '../store/actions/todo.action';
 
 export const HomeScreen = () => {
+  const dispatch = useDispatch();
+  const List = useSelector((state) => state.todo).todo;
+
   //Estado para controlar items y sumarlos a la lista
   const [textItem, setTextItem] = useState('');
-  const [itemList, setItemList] = useState([]);
 
   //Estado para manejar modal
   const [itemSelected, setItemSelected] = useState({});
@@ -20,19 +28,18 @@ export const HomeScreen = () => {
   //Estado para manejar input vacio
   const [inputError, setInputError] = useState('');
 
-  //Estado para manejar checkBox
-
   //Funcion eliminar elemento de la lista
   const handleConfirmDelete = () => {
     const id = itemSelected.id;
-    setItemList(itemList.filter((item) => item.id !== id));
+    dispatch(deleteItem(id));
     setModalVisible(false);
     setItemSelected({});
   };
   //Funcion para manejar modal
   const handleModal = (id) => {
-    setItemSelected(itemList.find((item) => item.id === id));
+    setItemSelected(List.find((item) => item.id === id));
     setModalVisible(true);
+    console.log(itemSelected);
   };
 
   //Funcion cerrar modal
@@ -43,40 +50,43 @@ export const HomeScreen = () => {
   //Funcion para almacenar datos en el state
   const handleItem = (t) => {
     setTextItem(t);
-    console.log(t)
-  }
+  };
 
   //Funcion para anadir elementos a la lista
-  const addItem = () => {
+  const add = () => {
+    const id = Math.random.toString();
     if (textItem.length !== 0) {
-      setItemList((currentItems) => [...currentItems, { id: Math.random().toString(), value: textItem }]);
+      dispatch(addItem({ id: id, value: textItem }));
+      dispatch(addTask(textItem, id));
       setTextItem('');
       setInputError('');
     } else {
       setInputError('Este campo es obligatorio');
     }
   };
- 
+  useEffect(() => {
+    dispatch(todoAction.loadData());
+  }, []);
   return (
     <View style={styles.container}>
       <Header />
       <Title />
-      <Add referencia={'Agregar item'} valor={textItem} onchange={handleItem} touch={addItem} />
+      <Add referencia={'Agregar item'} valor={textItem} onchange={handleItem} touch={add} />
       <View style={styles.contentFlatlist}>
         <Text style={styles.inputError}>{inputError}</Text>
-     <FlatList
-          data={itemList}
+        <Button onPress={fetchData} title="Buenas" />
+        <FlatList
+          data={List}
           renderItem={(data) => {
+            console.log(data);
             return (
               <View style={styles.contCard}>
                 <CardItem item={data.item} onpress={() => handleModal(data.item.id)} />
               </View>
             );
           }}
-          keyExtractor={(data) => data.id}
           style={styles.flatList}
-        />  
-        
+        />
       </View>
       <ModalComponent visible={modalVisible} onpressConfirmar={handleConfirmDelete} onpressCancelar={closeModal} />
 
@@ -111,6 +121,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   emptyContainer: {
-    fontSize: 50
-  }
+    fontSize: 50,
+  },
 });
